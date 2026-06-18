@@ -1,5 +1,5 @@
 
-#🐧 Sistemas Operativos III — Prácticas de Laboratorio
+# 🐧 Sistemas Operativos III — Prácticas de Laboratorio
 
 > **Estudiante:** Julio César Hernández Tibrey
 > **Carrera:** Seguridad Informática
