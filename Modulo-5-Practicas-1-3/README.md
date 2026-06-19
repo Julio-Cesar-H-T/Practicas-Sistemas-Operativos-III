@@ -4,7 +4,7 @@
 
 > **Materia:** Sistemas Operativos III · ITLA
 
-> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr7EdUOwUpbB-8D4kleaqhA\_
+> **Lista de Reproducción:** <a href="https://www.youtube.com/playlist?list=PL1bMSHFyMPr7EdUOwUpbB-8D4kleaqhA_" target="_blank">
 ---
 
 ## 📋 Contenido del Módulo
