@@ -1,7 +1,9 @@
 # 🗄️ Módulo 7 — Controlador de Dominios y Compartir Archivos
 
 > **Sistema Operativo:** Rocky Linux (servidor) · Ubuntu / Windows (clientes)
+
 > **Materia:** Sistemas Operativos III · ITLA
+
 > **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr59lTYmFjlptwAy6hSr_9y-
 ---
 
