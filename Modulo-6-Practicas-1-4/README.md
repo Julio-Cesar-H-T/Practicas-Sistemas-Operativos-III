@@ -1,9 +1,12 @@
 # 🔐 Módulo 6 — Seguridad en Linux
 
 > **Sistema Operativo:** Rocky Linux
+
 > **Materia:** Sistemas Operativos III · ITLA
+
 > ⚠️ Prácticas 6.3 y 6.4 realizadas en **Rocky Linux 8** (compatibilidad de paquetes)
 
+> **Lista de reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr592aA411Gfm-0bL8zpAq7C
 ---
 
 ## 📋 Contenido del Módulo
