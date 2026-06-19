@@ -1,183 +1,202 @@
-# 📦 Módulo 2 — Sistemas Operativos en Ejecución
+# ⚙️ Módulo 3 — Tareas Avanzadas y Administración de Servicios de Red
 
 > **Sistema Operativo:** Rocky Linux
+
 > **Materia:** Sistemas Operativos III · ITLA
 
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr4p5LDMDzXb1sElo7lkbdA7
 ---
 
 ## 📋 Contenido del Módulo
 
 | # | Práctica | Tema |
 |---|----------|------|
-| 2.1 | Gestión de Paquetes y Directorios | dnf, repositorios, compilación desde Git |
-| 2.2 | Automatización de Tareas | Crontab y AT |
-| 2.3 | Administración de Discos y Particiones | fdisk, mkfs, mount |
+| 3.1 | Edición de GRUB2 y Recuperación de Contraseña Root | Modo de recuperación, SELinux |
+| 3.2 | Shell Scripting | Bash scripting, automatización |
+| 3.3 | Servicio SSH | Acceso remoto, autenticación por llaves |
 
 ---
 
-## 2.1 — Gestión de Paquetes y Directorios
+## 3.1 — Edición de GRUB2 y Recuperación de Contraseña Root
 
 ### Objetivo
-Actualizar el sistema, gestionar repositorios con `dnf`, e instalar herramientas no disponibles oficialmente mediante compilación desde el código fuente (Git).
+Modificar el tiempo de espera del menú GRUB2 y realizar una recuperación de contraseña root mediante el modo de recuperación del sistema.
 
-### Comandos utilizados
+### Procedimiento
 
-**Actualizar paquetes del sistema:**
+**Editar el archivo de configuración de GRUB2:**
 ```bash
-sudo dnf update && upgrade
+sudo nano /etc/default/grub
 ```
 
-**Ver repositorios configurados:**
+Se localiza la línea `GRUB_TIMEOUT=5` y se modifica el valor (ej. a `20` segundos). Guardar con `Ctrl + O` y salir con `Ctrl + X`.
+
+**Aplicar la nueva configuración:**
 ```bash
-dnf repolist
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 ```
 
-**Buscar un paquete específico (Bashtop):**
+### Recuperación de contraseña root
+
+1. Reiniciar la máquina y presionar **`e`** apenas aparezca el menú GRUB.
+2. Ubicar la línea que comienza con `linux /vmlinuz-...`.
+3. Cambiar `ro` por `rw`, e ir al final de la línea para agregar:
+   ```
+   init=/bin/bash
+   ```
+4. Presionar `Ctrl + X` para arrancar con la configuración modificada.
+
+**Una vez dentro del sistema en modo bash root, cambiar la contraseña:**
 ```bash
-dnf search bashtop
+passwd
 ```
 
-**Si no está disponible en los repositorios, clonar desde GitHub:**
+**(Opcional pero recomendado) Forzar el reetiquetado de contexto SELinux en el próximo arranque:**
 ```bash
-sudo git clone https://github.com/aristocratos/bashtop.git
-cd bashtop
-./bashtop
+touch /.autorelabel
 ```
 
-**Eliminar archivos de configuración tras desinstalar:**
+**Salir del modo de recuperación y continuar el arranque normal:**
 ```bash
-rm -rf /home/jtibrey/bashtop
+exec /sbin/init
 ```
 
-**Limpiar caché y archivos residuales de dnf:**
-```bash
-sudo dnf clean all
-```
+> ⚠️ **Nota de seguridad:** Este procedimiento demuestra por qué la seguridad física del servidor es tan crítica como la seguridad lógica — cualquier persona con acceso a la consola de arranque puede resetear la contraseña root sin credenciales previas. La mitigación estándar es proteger el propio GRUB con contraseña.
 
 ---
 
-## 2.2 — Automatización de Tareas con Crontab y AT
+## 3.2 — Shell Scripting en Rocky Linux
 
 ### Objetivo
-Programar tareas recurrentes con `crontab` y tareas únicas con `at`.
+Crear dos scripts Bash funcionales: uno para respaldos automatizados y otro interactivo para capturar configuración de red.
 
-### Comandos utilizados
+### Script 1 — Backup de directorio home con fecha y hora
 
-**Editar el crontab del usuario actual:**
+**Crear el script:**
 ```bash
-sudo crontab -e
+nano backup_home.sh
 ```
 
-**Tarea 1 — Actualizar el sistema todos los días a las 11:00 PM:**
-```cron
-0 23 * * * dnf update -y
-```
-
-**Tarea 2 — Reiniciar el sistema todos los domingos a las 3:00 AM:**
-```cron
-0 3 * * 0 /sbin/shutdown -f now
-```
-
-Guardar y salir del editor (vi):
-```
-Esc
-:wq
-```
-
-**Habilitar el servicio AT (tareas de ejecución única):**
+**Contenido:**
 ```bash
-sudo systemctl start atd
-sudo systemctl enable atd
+#!/bin/bash
+FECHA=$(date +"%d-%m-%Y:%H:%M")
+tar -cvzf /home/$(whoami)/backup_home_$FECHA.tar.gz /home/$(whoami)
 ```
 
-**Ver contenido actual de archivos temporales:**
+**Dar permisos de ejecución y correr:**
 ```bash
-ls /tmp
+chmod +x backup_home.sh
+./backup_home.sh
 ```
 
-**Programar un trabajo con AT (eliminar contenido de /tmp en 1 minuto):**
+**Verificar el resultado:**
 ```bash
-echo "rm -rf /tmp/*" | at now + 1 minute
+cd /home/usuario
+ls -l
 ```
 
-**Verificar tras un minuto que la carpeta quedó vacía:**
+### Script 2 — Captura de configuración de red de forma interactiva
+
+**Crear el script:**
 ```bash
-ls /tmp
+sudo nano Iftest.sh
 ```
 
----
-
-## 2.3 — Administración de Discos y Particiones
-
-### Objetivo
-Agregar un disco adicional a la VM, particionarlo, formatearlo y montarlo en distintas ubicaciones del sistema de archivos.
-
-### Comandos utilizados
-
-**Listar discos y particiones existentes:**
+**Contenido:**
 ```bash
-lsblk
+#!/bin/bash
+read -p "Ingrese el nombre del archivo: " nombre
+ifconfig > /home/$(whoami)/Desktop/"$nombre".txt
+echo "El archivo se ha guardado en el escritorio con el nombre $nombre.txt"
 ```
 
-**Crear una partición en el nuevo disco con `fdisk`:**
+**Dar permisos de ejecución y correr:**
 ```bash
-sudo fdisk /dev/nvme0n1
+sudo chmod +x Iftest.sh
+./Iftest.sh
 ```
 
-Dentro de la utilidad interactiva `fdisk`:
-```
-n        # nueva partición
-p        # tipo primaria
-[Enter]  # número de partición por defecto
-[Enter]  # sector inicial por defecto
-[Enter]  # sector final por defecto
-w        # guardar cambios y salir
-```
+El script solicita un nombre (ej. `Iftest`) y guarda la salida de `ifconfig` en `Iftest.txt` dentro del escritorio.
 
-**Verificar que la partición fue creada:**
-```bash
-lsblk
-```
-
-**Formatear la partición en ext4:**
-```bash
-sudo mkfs.ext4 /dev/nvme0n1p1
-```
-
-**Crear un punto de montaje y montar el disco:**
+**Verificar el archivo generado:**
 ```bash
 cd Desktop
-mkdir Julio
-sudo mount /dev/nvme0n1p1 /home/jtibrey/Desktop/Julio
+ls -l
+cat Iftest.txt
 ```
 
-**Crear un archivo de prueba dentro del disco montado:**
+---
+
+## 3.3 — Servicio SSH entre Rocky Linux y Windows
+
+### Objetivo
+Configurar acceso remoto SSH entre una VM Rocky Linux y una máquina física Windows, incluyendo autenticación sin contraseña mediante llaves SSH.
+
+### Instalación y activación del servicio (en Rocky Linux)
+
 ```bash
-cd Julio
-sudo touch AdrianAlcantara.txt
+sudo dnf install openssh-server
+sudo systemctl start sshd
+sudo systemctl enable sshd
 ```
 
-**Desmontar el disco:**
+**Verificar el estado del servicio:**
 ```bash
-cd ..
-sudo umount /home/jtibrey/Desktop/Julio
+sudo systemctl status sshd
 ```
 
-**Montar el mismo disco en una ubicación distinta (`/mnt`):**
+### Conexión remota desde Windows hacia Rocky Linux
+
 ```bash
-sudo mount /dev/nvme0n1p1 /mnt
+ssh jtibrey@10.0.0.45
 ```
 
-**Verificar que el archivo persiste en la nueva ubicación:**
+Tras ingresar la contraseña del usuario Linux, se puede operar la terminal remota:
 ```bash
-ls /mnt
+ls
+ls -l
 ```
+
+**Cerrar la sesión:**
+```bash
+exit
+```
+
+### Autenticación sin contraseña mediante llaves SSH
+
+**Generar el par de llaves (desde Windows):**
+```bash
+ssh-keygen
+```
+
+**Copiar la llave pública generada:**
+```bash
+notepad C:/users/usuario/direccion_de_la_llave
+```
+
+**En Rocky Linux, preparar el directorio de llaves autorizadas:**
+```bash
+cd .ssh        # verificar si existe
+mkdir .ssh     # si no existe
+cd .ssh
+sudo nano authorized_keys
+```
+
+Se pega la llave pública copiada desde Windows, se guarda y se cierra el editor.
+
+**Volver a conectar desde Windows:**
+```bash
+ssh jtibrey@10.0.0.45
+```
+
+Si la llave fue correctamente configurada, la conexión se establece **sin solicitar contraseña**.
 
 ---
 
 ## 📌 Conclusiones del Módulo
 
-Este módulo demostró que los datos de una partición persisten independientemente del punto de montaje utilizado — el contenido no pertenece a la ruta, sino al sistema de archivos formateado en el disco. También se practicó la diferencia entre tareas recurrentes (`crontab`, basadas en patrones de tiempo) y tareas de ejecución única (`at`, basadas en un instante específico).
+Este módulo cubrió tres pilares de la administración avanzada de Linux: recuperación de acceso ante pérdida de credenciales (con sus implicaciones de seguridad física), automatización mediante shell scripting, y acceso remoto seguro mediante SSH con autenticación basada en llaves asimétricas — un mecanismo significativamente más seguro que la autenticación por contraseña.
 
 ---
 
