@@ -1,7 +1,9 @@
 # 🖥️ Módulo 1 — Realización de Tareas Básicas de Administración del Sistema
 
 > **Sistema Operativo:** Rocky Linux
+
 > **Materia:** Sistemas Operativos III · ITLA
+
 > **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr6hB8Mdc0zd128RzLvOEC-v
 ---
 
