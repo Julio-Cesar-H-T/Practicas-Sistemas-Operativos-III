@@ -1,8 +1,11 @@
 
 # 🐧 Sistemas Operativos III — Prácticas de Laboratorio
 > **Estudiante:** Julio César Hernández Tibrey
+
 > **Carrera:** Seguridad Informática
+
 > **Institución:** Instituto Tecnológico de las Américas (ITLA)
+
 > **Materia:** Sistemas Operativos III
 
 ---
