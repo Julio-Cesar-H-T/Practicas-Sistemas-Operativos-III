@@ -1,8 +1,10 @@
 # 🔄 Módulo 5 — Alta Disponibilidad y Clustering
 
 > **Sistema Operativo:** Rocky Linux (2 nodos)
+
 > **Materia:** Sistemas Operativos III · ITLA
 
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr7EdUOwUpbB-8D4kleaqhA_
 ---
 
 ## 📋 Contenido del Módulo
