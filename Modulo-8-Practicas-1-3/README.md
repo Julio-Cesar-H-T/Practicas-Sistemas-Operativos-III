@@ -1,8 +1,10 @@
 # ☁️ Módulo 8 — Cloud Computing y Contenerización
 
 > **Sistema Operativo:** Rocky Linux
+
 > **Materia:** Sistemas Operativos III · ITLA
 
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr6yIXO5FyGwC26rNOvzmioP
 ---
 
 ## 📋 Contenido del Módulo
