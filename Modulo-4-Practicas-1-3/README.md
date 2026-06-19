@@ -2,7 +2,7 @@
 
 > **Sistema Operativo:** Rocky Linux
 > **Materia:** Sistemas Operativos III · ITLA
-
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr6jFAfxDsYgejmvWuqomW-G
 ---
 
 ## 📋 Contenido del Módulo
