@@ -64,8 +64,7 @@ A lo largo de los módulos se trabajó con:
 Cada carpeta de módulo contiene su propio `README.md` con:
 - Objetivo de la práctica
 - Comandos utilizados y su explicación
-- Capturas de pantalla del proceso
-- Resultados y verificación
+- Listas de reproducción en Youtube
 
 ---
 
