@@ -1,8 +1,10 @@
 # 📦 Módulo 2 — Sistemas Operativos en Ejecución
 
 > **Sistema Operativo:** Rocky Linux
+
 > **Materia:** Sistemas Operativos III · ITLA
 
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr6TasCCodwa5o4IrqlDf6mz
 ---
 
 ## 📋 Contenido del Módulo
