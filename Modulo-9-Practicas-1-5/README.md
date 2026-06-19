@@ -1,9 +1,12 @@
 # 🤖 Módulo 9 — Infraestructura como Código (IaC) y Automatización
 
 > **Sistema Operativo:** Rocky Linux (controlador) · Ubuntu/Rocky + Windows (nodos gestionados)
+
 > **Materia:** Sistemas Operativos III · ITLA
+
 > **Cloud:** Microsoft Azure
 
+> **Lista de Reproducción:** https://www.youtube.com/playlist?list=PL1bMSHFyMPr44OpRxS6YiK5wp3kVHl-DX
 ---
 
 ## 📋 Contenido del Módulo
